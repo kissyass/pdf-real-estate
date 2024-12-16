@@ -8,6 +8,7 @@ from reportlab.pdfbase.ttfonts import TTFont
 from reportlab.pdfbase import pdfmetrics
 from urllib.parse import urljoin
 from io import BytesIO
+from PIL import Image as PILImage
 
 application = Flask(__name__)
 
@@ -152,18 +153,33 @@ def extract_text_content(url):
 
     return text_sections
 
-def download_image(url):
-    """Download an image and return it as a BytesIO object."""
-    response = requests.get(url)
-    response.raise_for_status()
-    return BytesIO(response.content)
+def download_and_validate_image(url):
+    """Download an image, validate it, and return a resized BytesIO object."""
+    try:
+        response = requests.get(url, timeout=10)
+        response.raise_for_status()
+        img_data = BytesIO(response.content)
+        
+        # Validate and resize the image using PIL
+        img = PILImage.open(img_data)
+        img.verify()  # Validate the image
+        img = PILImage.open(BytesIO(response.content))  # Reload after validation
+        img = img.convert("RGB")  # Ensure compatibility
+        img.thumbnail((400, 300))  # Resize to fit within 400x300
+        output = BytesIO()
+        img.save(output, format="JPEG")
+        output.seek(0)
+        return output
+    except Exception as e:
+        print(f"Error processing image {url}: {e}")
+        return None
 
 def generate_pdf(text_sections, images):
     """Generate a PDF with the given text and images and return it as a BytesIO object."""
     pdf_buffer = BytesIO()
     pdf = SimpleDocTemplate(pdf_buffer, pagesize=letter)
     elements = []
-    
+
     # Add text sections
     elements.extend(text_sections)
 
@@ -180,13 +196,17 @@ def generate_pdf(text_sections, images):
         )
         elements.append(Paragraph("Resimler", heading_style))
         elements.append(Spacer(1, 12))  # Add space below the heading
-    
+
     # Add images
     for img_url in images:
-        img_data = download_image(img_url)
-        img = Image(img_data, width=400, height=300)  # Adjust size as needed
-        elements.append(img)
-        elements.append(Spacer(1, 20))  # Add space between images
+        img_data = download_and_validate_image(img_url)
+        if img_data:
+            try:
+                img = Image(img_data, width=400, height=300)  # Adjust size as needed
+                elements.append(img)
+                elements.append(Spacer(1, 20))  # Add space between images
+            except Exception as e:
+                print(f"Error adding image to PDF: {e}")
     
     pdf.build(elements)
     pdf_buffer.seek(0)
