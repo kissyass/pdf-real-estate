@@ -3,17 +3,103 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>PDF Generator</title>
+    <title>Generate Property PDF</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            margin: 0;
+            padding: 20px;
+            background-color: #f9f9f9;
+        }
+        .container {
+            max-width: 600px;
+            margin: 0 auto;
+            padding: 20px;
+            background-color: #ffffff;
+            border-radius: 8px;
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+        }
+        h1 {
+            text-align: center;
+        }
+        form {
+            display: flex;
+            flex-direction: column;
+        }
+        label {
+            margin: 10px 0 5px;
+        }
+        input, textarea, button {
+            padding: 10px;
+            margin-bottom: 15px;
+            border: 1px solid #ccc;
+            border-radius: 4px;
+            font-size: 16px;
+        }
+        button {
+            background-color: #007BFF;
+            color: #ffffff;
+            border: none;
+            cursor: pointer;
+        }
+        button:hover {
+            background-color: #0056b3;
+        }
+        .message {
+            text-align: center;
+            color: red;
+        }
+    </style>
 </head>
 <body>
-    <h1>PDF Generator from Webpage</h1>
-    <form method="POST">
-        <label for="url">Enter the webpage URL:</label><br>
-        <input type="url" id="url" name="url" required style="width: 80%;"><br><br>
-        <button type="submit">Process</button>
-    </form>
-    {% if message %}
-    <p style="color: red;">{{ message }}</p>
-    {% endif %}
+    <div class="container">
+        <h1>Generate Property PDF</h1>
+        {% if message %}
+        <div class="message">{{ message }}</div>
+        {% endif %}
+        <form method="POST" enctype="multipart/form-data">
+            <!-- Property URL -->
+            <label for="url">Property URL:</label>
+            <input type="url" id="url" name="url" placeholder="Enter property URL" required>
+
+            <!-- Logo Upload -->
+            <label for="logo">Upload Logo:</label>
+            <input type="file" id="logo" name="logo" accept="image/*">
+
+            <!-- Contact Information -->
+            <label for="company_name">Company Name:</label>
+            <input type="text" id="company_name" name="company_name" placeholder="Enter company name">
+
+            <label for="agent_name">Real Estate Agent Name:</label>
+            <input type="text" id="agent_name" name="agent_name" placeholder="Enter agent name">
+
+            <label for="address">Address:</label>
+            <textarea id="address" name="address" rows="3" placeholder="Enter address"></textarea>
+
+            <label for="map_link">Link to Map:</label>
+            <input type="url" id="map_link" name="map_link" placeholder="Enter link to map">
+
+            <label for="email">Email:</label>
+            <input type="email" id="email" name="email" placeholder="Enter email address">
+
+            <label for="phone">Phone Number:</label>
+            <input type="text" id="phone" name="phone" placeholder="Enter phone number">
+
+            <label for="whatsapp_link">WhatsApp Link:</label>
+            <input type="url" id="whatsapp_link" name="whatsapp_link" placeholder="Enter WhatsApp link">
+
+            <label for="website_link">Website Link:</label>
+            <input type="url" id="website_link" name="website_link" placeholder="Enter website link">
+
+            <label for="telegram_link">Telegram Link:</label>
+            <input type="url" id="telegram_link" name="telegram_link" placeholder="Enter Telegram link">
+
+            <label for="instagram_link">Instagram Link:</label>
+            <input type="url" id="instagram_link" name="instagram_link" placeholder="Enter Instagram link">
+
+            <!-- Submit Button -->
+            <button type="submit">Generate PDF</button>
+        </form>
+    </div>
 </body>
 </html>
