@@ -1,0 +1,166 @@
+/* Global styles */
+body {
+    font-family: 'Arial', sans-serif;
+    margin: 0;
+    padding: 0;
+    background: linear-gradient(180deg, #fef5e7, #dfe4dc); /* Light warm gradient background */
+    color: #2c2c2c; /* Neutral dark for text */
+}
+
+h1, h2, h3 {
+    color: #7a402b; /* Warm brown for headings */
+    font-weight: bold;
+}
+
+a {
+    color: #e46e37; /* Bright terracotta for links */
+    text-decoration: none;
+    font-weight: bold;
+}
+
+a:hover {
+    text-decoration: underline;
+    color: #b3542e; /* Slightly darker terracotta */
+}
+
+/* Navbar styles */
+nav {
+    background: #402628; /* Deep earthy brown */
+    color: white;
+    padding: 10px 20px;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+}
+
+nav ul {
+    list-style: none;
+    margin: 0;
+    padding: 0;
+    display: flex;
+}
+
+nav ul li {
+    margin: 0 10px;
+}
+
+nav ul li a {
+    color: white;
+    font-weight: bold;
+}
+
+/* Container */
+.container {
+    max-width: 600px;
+    margin: 40px auto;
+    background: #fff; /* Clean white background for form area */
+    padding: 30px;
+    border-radius: 12px;
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15); /* Subtle shadow */
+}
+
+/* Form styles */
+.form {
+    display: flex;
+    flex-direction: column;
+}
+
+.form-title {
+    text-align: center;
+    margin-bottom: 20px;
+    color: #7a402b; /* Warm brown for headings */
+    font-size: 24px;
+}
+
+label {
+    margin-bottom: 5px;
+    font-weight: bold;
+    color: #402628; /* Deep earthy brown for labels */
+}
+
+input {
+    padding: 12px;
+    margin-bottom: 20px;
+    border: 1px solid #ddd;
+    border-radius: 8px;
+    font-size: 14px;
+    transition: all 0.3s ease;
+}
+
+input:focus {
+    border-color: #86a3ae; /* Soft teal on focus */
+    outline: none;
+    box-shadow: 0 0 5px rgba(134, 163, 174, 0.5); /* Subtle teal glow */
+}
+
+button {
+    padding: 12px;
+    background: linear-gradient(90deg, #e46e37, #b3542e); /* Gradient button in warm tones */
+    color: white;
+    border: none;
+    border-radius: 8px;
+    font-size: 16px;
+    font-weight: bold;
+    cursor: pointer;
+    transition: background 0.3s ease;
+}
+
+button:hover {
+    background: linear-gradient(90deg, #b3542e, #7a402b); /* Darker gradient on hover */
+}
+
+/* Flash messages */
+.flash-messages {
+    margin-bottom: 20px;
+}
+
+.alert {
+    padding: 12px;
+    border-radius: 8px;
+    margin-bottom: 15px;
+    font-weight: bold;
+    text-align: center;
+}
+
+.alert.success {
+    background-color: #dfe4dc; /* Soft greenish-gray for success */
+    color: #402628;
+}
+
+.alert.error {
+    background-color: #f4c2c2; /* Light warm red for errors */
+    color: #402628;
+}
+
+/* Footer text */
+.form-footer {
+    text-align: center;
+    margin-top: 20px;
+    font-size: 14px;
+    color: #402628; /* Deep brown */
+}
+
+.form-footer a {
+    color: #e46e37; /* Bright terracotta */
+}
+
+.form-footer a:hover {
+    color: #b3542e;
+}
+
+/* Responsive Design */
+@media (max-width: 768px) {
+    .container {
+        padding: 20px;
+        margin: 20px;
+    }
+
+    button {
+        font-size: 14px;
+    }
+
+    input {
+        font-size: 13px;
+    }
+}
