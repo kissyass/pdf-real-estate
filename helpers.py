@@ -10,6 +10,7 @@ from PyPDF2 import PdfReader, PdfWriter
 from PIL import Image as PILImage
 from reportlab.lib.units import inch
 import requests
+from extractors import translate_text
 
 # Register DejaVu font globally
 pdfmetrics.registerFont(TTFont("DejaVu", "DejaVuSans.ttf"))
@@ -27,7 +28,7 @@ def resize_and_save_logo(logo_file, upload_folder):
         return None
 
 
-def generate_footer_template(contact_info=None, logo_path=None):
+def generate_footer_template(contact_info=None, target_language='tr', logo_path=None):
     """Generate a footer template with three columns: logo, general info, and links."""
     pdf_buffer = BytesIO()
     c = canvas.Canvas(pdf_buffer, pagesize=letter)
@@ -56,16 +57,20 @@ def generate_footer_template(contact_info=None, logo_path=None):
         value = contact_info.get(field)
         if value:
             if field == "address":
-                c.drawString(middle_column_x, middle_y_offset, "Address:")
+                addr = translate_text("Address:", target_language, "en")
+                c.drawString(middle_column_x, middle_y_offset, addr)
+                # c.drawString(middle_column_x, middle_y_offset, "Address:")
                 middle_y_offset -= 0.15 * inch
                 for line in value.splitlines():
                     c.drawString(middle_column_x + 0.1 * inch, middle_y_offset, line.strip())
                     middle_y_offset -= 0.15 * inch
             else:
+                translated_txt = translate_text(field.replace('_', ' ').capitalize(),  target_language, "en")
                 c.drawString(
                     middle_column_x,
                     middle_y_offset,
-                    f"{field.replace('_', ' ').capitalize()}: {value}",
+                    f"{translated_txt}: {value}",
+                    # f"{field.replace('_', ' ').capitalize()}: {value}",
                 )
                 middle_y_offset -= 0.15 * inch
 

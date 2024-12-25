@@ -41,6 +41,7 @@ def login_required(f):
 def home():
     if request.method == "POST":
         url = request.form.get("url")
+        target_language = request.form.get("language")  # Get selected language
         logo_file = request.files.get("logo")
         contact_info = {
             "company_name": request.form.get("company_name"),
@@ -56,14 +57,15 @@ def home():
         }
 
         # Extract data
-        text_sections = extract_text_content(url)
+        text_sections = extract_text_content(url, target_language)
+        # text_sections = extract_text_content(url)
         images = extract_specific_images(url)
 
         # Generate content PDF
         content_pdf = generate_content_pdf(text_sections, images)
 
         # Generate footer template
-        footer_pdf = generate_footer_template(contact_info, logo_path=resize_and_save_logo(logo_file, application.config["UPLOAD_FOLDER"]))
+        footer_pdf = generate_footer_template(contact_info, target_language, logo_path=resize_and_save_logo(logo_file, application.config["UPLOAD_FOLDER"]))
 
         # Overlay footer on content
         final_pdf = overlay_footer_on_content(footer_pdf, content_pdf)
