@@ -2,7 +2,7 @@ from flask import Flask, render_template, request, send_file, session, flash, re
 from flask_sqlalchemy import SQLAlchemy
 from models import db
 from auth import auth
-from helpers import resize_and_save_logo, generate_footer_template, generate_content_pdf, overlay_footer_on_content
+from helpers import resize_and_save_logo, generate_footer_template, generate_content_pdf, overlay_footer_on_content, generate_content_pdf_with_footer_check, get_footer_height
 from extractors import extract_text_content, extract_specific_images
 from functools import wraps
 from reportlab.pdfbase.ttfonts import TTFont
@@ -58,17 +58,31 @@ def home():
 
         # Extract data
         text_sections = extract_text_content(url, target_language)
-        # text_sections = extract_text_content(url)
+
         images = extract_specific_images(url)
 
-        # Generate content PDF
-        content_pdf = generate_content_pdf(text_sections, images)
+        # # Generate content PDF
+        # content_pdf = generate_content_pdf(text_sections, images)
+
+        # # Generate footer template
+        # footer_pdf = generate_footer_template(contact_info, target_language, logo_path=resize_and_save_logo(logo_file, application.config["UPLOAD_FOLDER"]))
+
+        # # Overlay footer on content
+        # final_pdf = overlay_footer_on_content(footer_pdf, content_pdf)
+
+
+        # Calculate footer height
+        footer_height = get_footer_height(contact_info)
+
+        # Generate content PDF with footer height consideration
+        content_pdf = generate_content_pdf_with_footer_check(text_sections, images, footer_height)
 
         # Generate footer template
         footer_pdf = generate_footer_template(contact_info, target_language, logo_path=resize_and_save_logo(logo_file, application.config["UPLOAD_FOLDER"]))
 
         # Overlay footer on content
         final_pdf = overlay_footer_on_content(footer_pdf, content_pdf)
+
         return send_file(final_pdf, as_attachment=True, download_name="final_document.pdf", mimetype="application/pdf")
 
     return render_template("index.html")
